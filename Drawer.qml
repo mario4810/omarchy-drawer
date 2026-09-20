@@ -260,6 +260,9 @@ Scope {
         ManageList {
           id: manageList
           visible: root.manage
+          // Everything the screen has room for below the bar and the strip.
+          maxHeight: Math.max(Style.space(160),
+            (cardWindow.screen ? cardWindow.screen.height : 0) - cardWindow.barH - root.gap - 2 * root.margin - Style.space(90))
           width: parent.width
           bar: hostBar
           stashed: root.items

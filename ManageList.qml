@@ -17,7 +17,8 @@ Item {
 
   readonly property color foreground: bar ? bar.barForeground : Color.foreground
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
-  readonly property int maxHeight: Style.space(420)
+  // Room the list may take before it scrolls; the drawer sets it from the screen.
+  property int maxHeight: Style.space(420)
 
   implicitWidth: Style.space(300)
   implicitHeight: Math.min(maxHeight, flick.contentHeight)
@@ -85,6 +86,18 @@ Item {
         font.pixelSize: Style.font.body
       }
     }
+  }
+
+  // Shown only when the list is taller than its room, so it is clear there is
+  // more below.
+  Rectangle {
+    visible: flick.contentHeight > flick.height
+    anchors.right: parent.right
+    width: Style.space(3)
+    radius: width / 2
+    color: Util.alpha(root.foreground, 0.4)
+    y: flick.visibleArea.yPosition * flick.height
+    height: Math.max(Style.space(24), flick.visibleArea.heightRatio * flick.height)
   }
 
   component SectionLabel: Text {

@@ -67,6 +67,9 @@ is no plugin to load for them.
 
 Things to know:
 
+- **Stashed widgets show as disabled** in `omarchy plugin list` and the plugin
+  manager, since they are no longer in the bar layout. Turning one back on there
+  puts it on the bar again, and it leaves the drawer.
 - **A widget that hides itself stays hidden.** An update indicator with nothing
   to report takes no room in the drawer either.
 - **Widgets start fresh each time the drawer opens** and stop while it is
