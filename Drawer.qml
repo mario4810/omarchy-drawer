@@ -43,15 +43,11 @@ Scope {
   function hide() { open = false }
   function toggle() { open = !open }
 
-  // The card has to contrast with the ink the hosted widgets are drawn in. On
-  // a solid bar that is the bar's own background. On a transparent bar the ink
-  // is picked to suit the wallpaper, so go by the ink itself: dark ink gets a
-  // light card, light ink a dark one.
-  readonly property color ink: bar ? bar.barForeground : Color.foreground
-  readonly property bool darkInk: 0.299 * ink.r + 0.587 * ink.g + 0.114 * ink.b < 0.5
-  readonly property color surface: bar && !bar.transparent
-    ? bar.background
-    : (darkInk ? Color.foreground : Color.popups.background)
+  // The hosted widgets see the bar through this: same bar, popup colours.
+  BarProxy {
+    id: hostBar
+    source: root.bar
+  }
 
   // True when `item` lives inside the card, i.e. is one of the hosted widgets
   // or something they own.
@@ -172,7 +168,7 @@ Scope {
 
     BorderSurface {
       id: card
-      color: root.surface
+      color: Color.popups.background
       borderSpec: Border.surfaceSpec("popups", "border", Color.popups.border, Math.max(1, Style.space(2)))
       radius: Style.cornerRadius
       padding: Style.space(6)
@@ -208,26 +204,26 @@ Scope {
             delegate: HostedWidget {
               required property var modelData
               entry: modelData
-              bar: root.bar
+              bar: hostBar
               active: root.open
             }
           }
 
           Text {
             visible: root.items.length === 0 && !root.manage
-            height: root.bar ? root.bar.barSize : 0
+            height: hostBar.barSize
             verticalAlignment: Text.AlignVCenter
             leftPadding: Style.space(6)
             rightPadding: Style.space(6)
             text: "Nothing in the drawer"
-            color: root.bar ? root.bar.barForeground : Color.foreground
-            font.family: root.bar ? root.bar.fontFamily : Style.font.family
+            color: hostBar.barForeground
+            font.family: hostBar.fontFamily
             font.pixelSize: Style.font.body
           }
 
           // Edit toggle, always last.
           Item {
-            width: root.bar ? root.bar.barSize : Style.space(28)
+            width: hostBar.barSize
             height: width
 
             Rectangle {
@@ -235,13 +231,13 @@ Scope {
               anchors.margins: Style.space(2)
               radius: Style.cornerRadius
               color: editMouse.containsMouse || root.manage
-                ? Util.alpha(root.bar ? root.bar.barForeground : Color.foreground, 0.14) : "transparent"
+                ? Util.alpha(hostBar.barForeground, 0.14) : "transparent"
             }
             Text {
               anchors.centerIn: parent
               text: root.manage ? "󰅖" : "󰏫"
-              color: root.bar ? root.bar.barForeground : Color.foreground
-              font.family: root.bar ? root.bar.fontFamily : Style.font.family
+              color: hostBar.barForeground
+              font.family: hostBar.fontFamily
               font.pixelSize: Style.font.icon
             }
             MouseArea {
@@ -258,14 +254,14 @@ Scope {
           visible: manageList.visible
           width: parent.width
           height: 1
-          color: Util.alpha(root.bar ? root.bar.barForeground : Color.foreground, 0.2)
+          color: Util.alpha(hostBar.barForeground, 0.2)
         }
 
         ManageList {
           id: manageList
           visible: root.manage
           width: parent.width
-          bar: root.bar
+          bar: hostBar
           stashed: root.items
           movable: root.movable
           busyId: ctl.busyId

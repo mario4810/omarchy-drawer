@@ -17,7 +17,7 @@ Item {
 
   readonly property color foreground: bar ? bar.barForeground : Color.foreground
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
-  readonly property int maxHeight: Style.space(320)
+  readonly property int maxHeight: Style.space(420)
 
   implicitWidth: Style.space(300)
   implicitHeight: Math.min(maxHeight, flick.contentHeight)
