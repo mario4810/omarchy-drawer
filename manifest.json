@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.mario4810.drawer",
+  "name": "Drawer",
+  "version": "0.1.0",
+  "author": "mario4810",
+  "license": "MIT",
+  "description": "One bar button that opens a small drawer holding the bar widgets you moved out of the bar.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Drawer",
+    "description": "Button that opens a drawer of stashed bar widgets",
+    "category": "Status",
+    "defaultSection": "right",
+    "allowMultiple": false
+  }
+}
